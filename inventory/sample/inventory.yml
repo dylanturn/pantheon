@@ -1,0 +1,13 @@
+---
+all:
+  hosts:
+    localhost:
+  vars:
+    service_spaces:
+      - name: example-service
+      - name: example-service-special-quotas
+        compute_quotas:
+          requests.cpu: 99
+          requests.memory: 100
+    shared_spaces: []
+    user_spaces: []

@@ -1,0 +1,31 @@
+---
+
+- name: Configure Service Namespaces
+  include_tasks: configure_namespaces.yml
+  vars:
+    prefix: "{{ configured_service_spaces.prefix }}"
+    quotas: "{{ configured_service_spaces.service_quotas }}"
+  with_items:
+    - "{{ configured_service_spaces.spaces }}"
+  loop_control:
+    loop_var: space
+
+- name: Configure Shared Namespaces
+  include_tasks: configure_namespaces.yml
+  vars:
+    prefix: "{{ configured_shared_spaces.prefix }}"
+    quotas: "{{ configured_shared_spaces.service_quotas }}"
+  with_items:
+    - "{{ configured_shared_spaces.spaces }}"
+  loop_control:
+    loop_var: space
+
+- name: Configure User Namespaces
+  include_tasks: configure_namespaces.yml
+  vars:
+    prefix: "{{ configured_user_spaces.prefix }}"
+    quotas: "{{ configured_user_spaces.service_quotas }}"
+  with_items:
+    - "{{ configured_user_spaces.spaces }}"
+  loop_control:
+    loop_var: space

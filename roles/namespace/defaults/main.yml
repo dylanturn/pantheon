@@ -1,0 +1,61 @@
+---
+
+service_spaces: []
+shared_spaces: []
+user_spaces: []
+
+# User and Services Namespaces
+default_quotas:
+
+  compute_requests:
+    requests.cpu: 1
+    requests.memory: 1
+    requests.storage: 0
+    requests.ephemeral-storage: 0
+
+  compute_limits:
+    limits.cpu: 1
+    limits.memory: 1
+    limits.storage: 0
+    limits.ephemeral-storage: 0
+
+  storage:
+    requests: 0
+    persistent_volume_claims: 4
+    ephemeral_storage_requests: 100
+    ephemeral_storage_limits: 200
+
+  object_count:
+    loadbalancers: 5
+    nodeports: 0
+    configmaps: 10
+    pods: 4
+    replicationcontrollers: 20
+    secrets: 10
+
+configured_service_spaces:
+  service_quotas:
+    compute_requests: "{{ service_spaces.(service_quotas | default({})).(compute_requests | default({})) | default(default_quotas.compute_requests) }}"
+    compute_limits: "{{ service_spaces.(service_quotas | default({})).(compute_limits | default({})) | default(default_quotas.compute_limits) }}"
+    storage: "{{ service_spaces.(service_quotas | default({})).(storage | default({})) | default(default_quotas.storage) }}"
+    object_count: "{{ service_spaces.(service_quotas | default({})).(object_count | default({})) | default(default_quotas.object_count) }}"
+  prefix: svc
+  spaces: []
+
+configured_shared_spaces:
+  service_quotas:
+    compute_requests: "{{ shared_spaces.(service_quotas | default({})).(compute_requests | default({})) | default(default_quotas.compute_requests) }}"
+    compute_limits: "{{ shared_spaces.(service_quotas | default({})).(compute_limits | default({})) | default(default_quotas.compute_limits) }}"
+    storage: "{{ shared_spaces.(service_quotas | default({})).(storage | default({})) | default(default_quotas.storage) }}"
+    object_count: "{{ shared_spaces.(service_quotas | default({})).(object_count | default({})) | default(default_quotas.object_count) }}"
+  prefix: shd
+  spaces: []
+
+configured_user_spaces:
+  service_quotas:
+    compute_requests: "{{ user_spaces.(service_quotas | default({})).(compute_requests | default({})) | default(default_quotas.compute_requests) }}"
+    compute_limits: "{{ user_spaces.(service_quotas | default({})).(compute_limits | default({})) | default(default_quotas.compute_limits) }}"
+    storage: "{{ user_spaces.(service_quotas | default({})).(storage | default({})) | default(default_quotas.storage) }}"
+    object_count: "{{ user_spaces.(service_quotas | default({})).(object_count | default({})) | default(default_quotas.object_count) }}"
+  prefix: usr
+  spaces: []

@@ -1,0 +1,64 @@
+---
+
+
+- set_fact:
+    space_quotas:
+      # Compute Resource Quota
+      compute_requests:
+        requests.cpu: "{{ default(default_quotas.compute_requests.requests.cpu) }}"
+        requests.memory: "{{ default(default_quotas.compute_requests.requests.cpu) }}"
+        requests.storage: 0
+        requests.ephemeral-storage: 0
+
+      compute_limits:
+        limits.cpu: 1
+        limits.memory: 1
+        limits.storage: 0
+        limits.ephemeral-storage: 0
+
+      # Storage Resource Quota
+      storage:
+        requests: 0
+        persistent_volume_claims: 4
+        ephemeral_storage_requests: 100
+        ephemeral_storage_limits: 200
+
+      # Other Object Count Quotas
+      object_count:
+        loadbalancers: 5
+        nodeports: 0
+        configmaps: 10
+        pods: 4
+        replicationcontrollers: 20
+        secrets: 10
+
+- name: "Configure a k8s namespace"
+  k8s:
+    name: "{{ space.name }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: "Configure a k8s compute resource quota"
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ResourceQuota
+      metadata:
+        name: compute-resources
+        namespace: "{{ space.name }}"
+      spec:
+        hard: "{{ default_quotas.compute_requests | combine(default_quotas.compute_limits) }}"
+
+- name: "Configure a k8s object count resource quota"
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ResourceQuota
+      metadata:
+        name: object-counts
+        namespace: "{{ space.name }}"
+      spec:
+        hard: "{{ default_quotas.object_count }}"
