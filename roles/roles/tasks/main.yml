@@ -1,0 +1,31 @@
+---
+
+- name: Configure Service Roles
+  include_tasks: configure_roles.yml
+  vars:
+    prefix: "{{ configured_service_spaces.prefix }}"
+    roles: "{{ configured_service_spaces.service_roles }}"
+  with_items:
+    - "{{ configured_service_spaces.spaces }}"
+  loop_control:
+    loop_var: space
+
+- name: Configure Shared Roles
+  include_tasks: configure_roles.yml
+  vars:
+    prefix: "{{ configured_shared_spaces.prefix }}"
+    roles: "{{ configured_shared_spaces.service_roles }}"
+  with_items:
+    - "{{ configured_shared_spaces.spaces }}"
+  loop_control:
+    loop_var: space
+
+- name: Configure User Roles
+  include_tasks: configure_roles.yml
+  vars:
+    prefix: "{{ configured_user_spaces.prefix }}"
+    roles: "{{ configured_user_spaces.service_roles }}"
+  with_items:
+    - "{{ configured_user_spaces.spaces }}"
+  loop_control:
+    loop_var: space

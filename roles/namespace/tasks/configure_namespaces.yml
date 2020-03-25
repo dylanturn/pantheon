@@ -5,7 +5,7 @@
     space_quotas:
       # Compute Resource Quota
       compute_requests:
-        requests.cpu: "{{ default(default_quotas.compute_requests.requests.cpu) }}"
+        requests.cpu: "{{ spacedefault(default_quotas.compute_requests.requests.cpu) }}"
         requests.memory: "{{ default(default_quotas.compute_requests.requests.cpu) }}"
         requests.storage: 0
         requests.ephemeral-storage: 0

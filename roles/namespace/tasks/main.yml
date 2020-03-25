@@ -4,7 +4,11 @@
   include_tasks: configure_namespaces.yml
   vars:
     prefix: "{{ configured_service_spaces.prefix }}"
-    quotas: "{{ configured_service_spaces.service_quotas }}"
+    quotas:
+      compute_requests: "{{space.service_quotas.compute_requests}}" #"{{ service_spaces.(service_quotas | default({})).(compute_requests | default({})) | default(space.service_quotas.compute_requests) }}"
+      compute_limits: "{{space.service_quotas.compute_limits}}" #"{{ service_spaces.(service_quotas | default({})).(compute_limits | default({})) | default(space.service_quotas.compute_limits) }}"
+      storage: "{{space.service_quotas.storage}}" # "{{ service_spaces.(service_quotas | default({})).(storage | default({})) | default(space.service_quotas.storage) }}"
+      object_count: "{{space.service_quotas.object_count}}" #"{{ service_spaces.(service_quotas | default({})).(object_count | default({})) | default(space.service_quotas.object_count) }}"
   with_items:
     - "{{ configured_service_spaces.spaces }}"
   loop_control:
